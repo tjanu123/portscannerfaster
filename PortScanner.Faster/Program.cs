@@ -1,7 +1,4 @@
-﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Engines;
-using BenchmarkDotNet.Running;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -12,17 +9,6 @@ using System.Threading.Tasks;
 
 namespace PortScanner.Faster
 {
-    [SimpleJob(RunStrategy.Monitoring, targetCount: 3, id: "MonitoringJob")]
-    [MinColumn, MaxColumn, MeanColumn, MedianColumn]
-    public class Bench
-    {
-        [Benchmark]
-        public async Task GoInnerThreadAsync()
-        {
-            await Program.StartScanningAsync();
-        }
-    }
-
     internal class Program
     {
         private static List<ConnectionResult> ConnectionResults = new List<ConnectionResult>();
@@ -32,9 +18,8 @@ namespace PortScanner.Faster
 
         private static async Task Main(string[] args)
         {
-            BenchmarkRunner.Run<Bench>();
-            //await StartScanningAsync();
-            //await WriteResultsToFileAsync();
+            await StartScanningAsync();
+            await WriteResultsToFileAsync();
         }
 
         public static async Task StartScanningAsync()
